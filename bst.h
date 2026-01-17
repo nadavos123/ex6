@@ -22,4 +22,8 @@ void bstPreorder(BSTNode* root, void (*print)(void*));
 void bstPostorder(BSTNode* root, void (*print)(void*));
 void bstFree(BSTNode* root, void (*freeData)(void*));
 
+// Copare Functions
+int* compareInt(int* a, int* b);
+char* compareChar(char* a, char* b);
+char* compareString(char* a, char* b);
 #endif

@@ -24,7 +24,6 @@ int main(int argc, char* argv[]) {
         if (c == 4) running = 0;
         else if (c >= 1 && c <= 3) actions[c](&game);
     }
-
     freeGame(&game);
     return 0;
 }

@@ -1,22 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "utils.h"
-char *getString(const char* prompt){
+
+int main(){
     char ch;
     int length = 0;
     int dynmicLength = 0+1;
-    printf("%s",prompt);
     char *str = malloc(dynmicLength*sizeof(char));
     if(str==NULL){
         exit(1);
     }    
+    printf("please enter:");
     ch = getchar();
-    //Keep asking for a char until one char (not \n) entered
-    while (ch=='\n'){
+    while (ch=='\n'){//if \n entered first keep asking until 
         ch=getchar();
     }
-    //Asking for a char until \n entered
     while (ch!='\n'){
         length++;
         if(length+1>dynmicLength){
@@ -37,13 +35,6 @@ char *getString(const char* prompt){
     if(str==NULL){
         exit(1);  
     }      
-    return str;
-}
-int getInt(const char* prompt){
-    int num;
-    printf("%s",prompt);
-    scanf("%d " ,&num);
-    while(getchar()!='\n'){//clear the buffer
-        continue;
-    }
+    printf("%s",str);
+    return 0;
 }
