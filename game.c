@@ -188,10 +188,27 @@ int fight(GameState *g, Room *r){
         printf("No monster\n");
         return 0;
     }    
-    while(r->monster->hp>0||g->player->hp>0){
-        printf("")
+    int playerHp = g->player->hp;
+    int monsterHp = r->monster->hp;
+    int 
+    while(playerHp>0&&monsterHp>0){
+        monsterHp=damgeMonster(g, r->monster);
+        if(monsterHp<=0){
+            monsterHp=0;
+        }
+        printf("You deal %d damage. Monster HP: %d", da)
+        if(playerHp<=0){
+            playerHp=0;
+        }
     }
     
+}
+int damagePlayer(GameState *g, Monster *m){
+    int hp = (g->player->hp)-(m->attack);
+    return hp;
+}
+int damgeMonster(GameState *g, Monster *m){
+    int hp = (m->hp)-(g->player->baseAttack);
 }
 void bag(GameState *g){
     printf("=== INVENTORY ===");
