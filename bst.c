@@ -46,6 +46,7 @@ int compareChar(char *a, char *b){
     }
     return 0;
 }
+
 int compareString(char *a, char *b){
     return(strcmp(a,b)>0);
 }    

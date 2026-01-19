@@ -188,32 +188,71 @@ int fight(GameState *g, Room *r){
         printf("No monster\n");
         return 0;
     }    
-    int playerHp = g->player->hp;
-    int monsterHp = r->monster->hp;
-    int 
-    while(playerHp>0&&monsterHp>0){
-        monsterHp=damgeMonster(g, r->monster);
-        if(monsterHp<=0){
-            monsterHp=0;
+    int newPlayerHp = g->player->hp;
+    int newMonsterHp = r->monster->hp;
+    while(newPlayerHp>0&&newMonsterHp>0){
+        newMonsterHp=damgeMonster(g, r->monster);
+        
+        int playerAttack =(r->monster->hp)-(newMonsterHp);
+        r->monster->hp=newMonsterHp;
+        printf("You deal %d damage. Monster HP: %d\n",playerAttack ,r->monster->hp);
+        if(newMonsterHp==0){
+            break;
         }
-        printf("You deal %d damage. Monster HP: %d", da)
-        if(playerHp<=0){
-            playerHp=0;
-        }
+        newPlayerHp=damagePlayer(g, r->monster);
+        int monsterAttack = (g->player->hp)-(newPlayerHp);
+        g->player->hp=newPlayerHp;
+        printf("Monster deals %d damage. Your HP: %d\n", monsterAttack, g->player->hp);
     }
-    
+    if(newMonsterHp==0){
+        bstInsert(g->player->defeatedMonsters, r->monster, );
+        r->monster=NULL;
+        printf("Monster defeated!\n");
+        return
+    }
+    printf("--- YOU DIED ---\n");
+    free();
 }
+
 int damagePlayer(GameState *g, Monster *m){
     int hp = (g->player->hp)-(m->attack);
+    if(hp<0){
+        return 0;
+    }
     return hp;
 }
+
 int damgeMonster(GameState *g, Monster *m){
     int hp = (m->hp)-(g->player->baseAttack);
+    if(hp<0){
+        return 0;
+    }
+    return hp;
 }
+
+void pickup(GameState *g, Room *r){
+    if(r->item==NULL){
+        printf("No item here\n");
+        return;
+    }
+    if(r->monster!=NULL){
+        printf("Kill monster first\n");
+        return;
+    }
+
+    if(bstFind(g->player->bag, r->item, compareItem)!=NULL){
+        printf("Duplicate item.\n");
+        return;
+    }
+    bstInsert(g->player->bag, r->item, compareItem);
+
+    printf("picked up %s\n" ,r->item->name);
+    r->item=NULL;
+}
+
 void bag(GameState *g){
-    printf("=== INVENTORY ===");
-    printf("1.Preorder 2.Inorder 3.Postorder");
-    g->player->bag;
+    printf("=== INVENTORY ===\n");
+    printf("1.Preorder 2.Inorder 3.Postorder\n");
 }
 
 /* Room functions*/
