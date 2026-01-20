@@ -14,9 +14,6 @@ BST* createBST(int (*cmp)(void*, void*), void (*print)(void*), void (*freeData)(
 }
 
 BSTNode* bstInsert(BSTNode* root, void* data, int (*cmp)(void*, void*)){
-    if(root==NULL){
-        return -1;
-    }
     if(cmp(root->data,data)){
         if(root->left!=NULL){
             return bstInsert(root->left,data,cmp);
@@ -34,19 +31,49 @@ BSTNode* bstInsert(BSTNode* root, void* data, int (*cmp)(void*, void*)){
     return 0;
 }
 
-int compareInt(int *a, int *b){
-    if(*a>*b){
-        return 1;
+void* bstFind(BSTNode* root, void* data, int (*cmp)(void*, void*)){
+    if(root==NULL) return NULL;
+
+    int result = cmp(root->data,data);
+    if(result==0){
+        return data;
     }
-    return 0;
-}
-int compareChar(char *a, char *b){
-    if(*a>*b){
-        return 1;
+    if(result>0){
+        return bstFind(root->left,data,cmp);
     }
-    return 0;
+    return bstFind(root->right, data, cmp);
 }
 
-int compareString(char *a, char *b){
-    return(strcmp(a,b)>0);
-}    
+void bstInorder(BSTNode* root, void (*print)(void*)){
+    if(root==NULL){
+        return;
+    }    
+    bstInorder(root->left, print);
+    print(root->data);
+    bstInorder(root->right, print);
+}
+void bstPreorder(BSTNode* root, void (*print)(void*)){
+    if(root==NULL){
+        return;
+    }
+    print(root->data);
+    bstPreorder(root->left, print);
+    bstPreorder(root->right, print);
+}
+void bstPostorder(BSTNode* root, void (*print)(void*)){
+    if(root==NULL){
+        return;
+    }
+    bstPostorder(root->left, print);
+    bstPostorder(root->right, print);
+    print(root->data);
+}
+void bstFree(BSTNode* root, void (*freeData)(void*)){
+    if(root==NULL){
+        return;
+    }
+    bstFree(root->left,freeData);
+    bstFree(root->right, freeData);
+    freeData(root->data);
+    free(root);
+}

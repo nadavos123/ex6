@@ -13,8 +13,6 @@ typedef enum { PHANTOM, SPIDER, DEMON, GOLEM, COBRA } MonsterType;
 typedef enum { UP=-1, DOWN=1, LEFT=-1, RIGHT=1} Directions;
 typedef enum { MOVE, FIGHT, PICKUP, BAG, DEFEATED, QUIT} PlayerAction;
 
-typedef void (*PlayerActionFunc)(GameState*);
-
 
 typedef struct Item {
     char* name;
@@ -61,12 +59,12 @@ static void displayMap(GameState* g);
 static void printRoomLegend(GameState *g);
 
 // Monster functions
-void freeMonster(void* data);
+void freeMonster(Monster* m);
 int compareMonsters(void* a, void* b);
 void printMonster(void* data);
 
 // Item functions
-void freeItem(void* data);
+void freeItem(Item* i);
 int compareItems(void* a, void* b);
 void printItem(void* data);
 
@@ -75,11 +73,14 @@ void addRoom(GameState* g);
 void initPlayer(GameState* g);
 void playGame(GameState* g);
 void freeGame(GameState* g);
+int checkVictory(GameState* g);
 
 // Play functions
 Room* move(GameState *g, Room *r);
 int fight(GameState *g, Room *r);
-void pickup(GameState *g);
+int damgeMonster(GameState *g, Monster *m);
+int damagePlayer(GameState *g, Monster *m);
+void pickup(GameState *g, Room *r);
 void bag(GameState *g);
 void defeated(GameState *g);
 
@@ -87,4 +88,5 @@ void defeated(GameState *g);
 Room* findRoomById(GameState* g, int id);
 Room* findRoomByCoordinates(GameState *g, int x, int y);
 
+int compareInt(int a, int b);
 #endif
