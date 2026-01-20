@@ -5,30 +5,33 @@
 
 BST* createBST(int (*cmp)(void*, void*), void (*print)(void*), void (*freeData)(void*)){
     BST *tree;
-    BSTNode *root;
     tree=malloc(sizeof(BST));
     tree->compare=cmp;
     tree->print=print;
     tree->freeData=freeData;
     tree->root=NULL;
+    return tree;
 }
 
 BSTNode* bstInsert(BSTNode* root, void* data, int (*cmp)(void*, void*)){
-    if(cmp(root->data,data)){
-        if(root->left!=NULL){
-            return bstInsert(root->left,data,cmp);
-        }
-        root->left=createBST;
-        return 0;
+    if(root==NULL){
+        return createNode(data);
     }
-    if(!cmp(root->data,data)){
-        if(root->right!=NULL){
-            return bstInsert(root->right,data,cmp);
-        }
-        root->right=createBST;
-        return 0;
+    int result = cmp(root->data, data);
+    if(result>0){
+        root->left= bstInsert(root->left, data, cmp);
     }
-    return 0;
+    if(result<0){
+        root->right = bstInsert(root->right, data, cmp);
+    }
+    return root;
+}
+BSTNode* createNode(void* data){
+    BSTNode *node = malloc(sizeof(BSTNode));
+    node->data=data;
+    node->right=NULL;
+    node->left=NULL;
+    return node;
 }
 
 void* bstFind(BSTNode* root, void* data, int (*cmp)(void*, void*)){
@@ -36,7 +39,7 @@ void* bstFind(BSTNode* root, void* data, int (*cmp)(void*, void*)){
 
     int result = cmp(root->data,data);
     if(result==0){
-        return data;
+        return (root->data);
     }
     if(result>0){
         return bstFind(root->left,data,cmp);

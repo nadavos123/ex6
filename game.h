@@ -59,12 +59,12 @@ static void displayMap(GameState* g);
 static void printRoomLegend(GameState *g);
 
 // Monster functions
-void freeMonster(Monster* m);
+void freeMonster(void* m);
 int compareMonsters(void* a, void* b);
 void printMonster(void* data);
 
 // Item functions
-void freeItem(Item* i);
+void freeItem(void* i);
 int compareItems(void* a, void* b);
 void printItem(void* data);
 

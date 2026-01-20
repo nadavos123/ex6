@@ -101,7 +101,8 @@ void addRoom(GameState* g){
 }
 
 /*Monster functions*/
-void freeMonster(Monster *m){
+void freeMonster(void *a){
+    Monster *m =(Monster*)a;
     free(m->name);
     free(m);
 }
@@ -142,7 +143,8 @@ void printMonster(void *a){
 
 /*Item functions*/
 
-void freeItem(Item *i){
+void freeItem(void *a){
+    Item *i = (Item*)a;
     free(i->name);
     free(i);
 }
@@ -191,8 +193,8 @@ void initPlayer(GameState* g){
     p->maxHp=g->configMaxHp;
     p->hp=g->configMaxHp;   
     p->baseAttack=g->configBaseAttack;
-    p->bag=malloc(sizeof(BSTNode));
-    p->defeatedMonsters=malloc(sizeof(BSTNode));
+    p->bag=createBST(compareItems, printItem, freeItem);
+    p->defeatedMonsters=createBST(compareMonsters,printMonster,freeMonster);
     g->player=p;
 }
 
@@ -234,7 +236,7 @@ void playGame(GameState* g){
             pickup(g, r);
             break;
         case BAG:
-            pickup(g, r);
+            bag(g);
         case DEFEATED:
             defeated(g);
         default:
@@ -349,16 +351,15 @@ void bag(GameState *g){
     int choose = getInt("1.Preorder 2.Inorder 3.Postorder\n");
     typedef void (*searchMethods)(BSTNode*, void (*)(void*));;
     searchMethods Methods[] = {bstPreorder,bstInorder, bstPostorder};
-    Methods[choose](g->player->bag, (void*)printItem);
+    Methods[choose](g->player->bag->root, g->player->bag->print);
 }
 
 void defeated(GameState *g){
-    printf("=== DEFEATED MONSTERS ===");
+    printf("=== DEFEATED MONSTERS ===\n");
     int choose = getInt("1.Preorder 2.Inorder 3.Postorder\n");
     typedef void (*searchMethods)(BSTNode*, void (*)(void*));
     searchMethods Methods[] = {bstPreorder,bstInorder, bstPostorder};
-    Methods[choose](g->player->defeatedMonsters, printItem);
-
+    Methods[choose](g->player->defeatedMonsters->root, g->player->bag->print);
 }
 /* Room functions*/
 Room* findRoomById(GameState *g, int id){   
@@ -383,7 +384,6 @@ Room* findRoomByCoordinates(GameState *g, int x, int y){
     }
     return NULL;
 }   
-
 /* Map display functions */
 static void displayMap(GameState* g) {
     if (!g->rooms) return;
@@ -441,8 +441,8 @@ void freeGame(GameState* g){
         if((r->item)!=NULL){
             freeItem(r->item);
         }
-        bstFree(g->player->bag,freeItem);
-        bstFree(g->player->defeatedMonsters,freeMonster);
+        bstFree(g->player->bag->root,g->player->bag->freeData);
+        bstFree(g->player->defeatedMonsters->root,g->player->bag->freeData);
         free(g->player);
     }
 }
